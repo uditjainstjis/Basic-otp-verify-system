@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- <button onclick="bruh()">Send Mail</button>
+    <script>
+    function bruh(){
+        window.location.href='http://192.168.29.125:8083/send-mail'
+    }
+    </script> -->
+    <form action="/send-email" method="post" id="emailform">
+    <input type="email" id="collectemail" placeholder="example@gmail.com" required>
+    <button type="submit">submit</button>
+    </form>
+    <script>
+        var collectemail = document.getElementById('collectemail')
+        document.getElementById('emailform').onsubmit= function(event){
+            event.preventDefault()
+            var formdata = collectemail.value
+            var xhr = new XMLHttpRequest()
+            xhr.open('POST','/send-email',true)
+            xhr.onreadystatechange = function() {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    console.log('Data sent successfully:', xhr.responseText);
+                    // Add the line to redirect to /send-email after data is sent
+                    window.location.href = '/send-email';
+                } else {
+                    console.error('Error:', xhr.status);
+                }
+            }}
+            xhr.send(formdata)
+            console.log(formdata)
+
+        }
+    </script>
+</body>
+</html>

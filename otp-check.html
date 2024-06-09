@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+</head>
+<body>
+    <form action="/teleotp" id="form" method="post">
+        <input type="hidden" id="sessionID" name="sessionID"> 
+        <input type="number" id="otpinp" name="otpinp" min="0000" max="9999">
+        <button type="submit" id="otpsub">Submit</button>
+    </form>
+    <script>
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', '/get-session-id', true); // Request the session ID from the server
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    var sessionID = xhr.responseText; // Get the session ID from the server response
+                    document.getElementById("sessionID").value = sessionID; // Set the session ID in the form
+                } else {
+                    console.error('Failed to fetch session ID');
+                }
+            }
+        };
+        xhr.send();
+
+        document.getElementById('form').onsubmit = function(event) {
+            var formdata = new FormData(); 
+            var otpinp = document.getElementById("otpinp").value;
+            var sessionID = document.getElementById("sessionID").value;
+            formdata.append('otpinp', otpinp);
+            formdata.append('sessionID', sessionID);
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/teleotp', true);
+            xhr.send(formdata);
+        };
+    </script>
+</body>
+</html>
